@@ -10,7 +10,7 @@ import unittest
 from unittest.mock import create_autospec, patch
 from io import StringIO
 from console import HBNBCommand
-from models import storage
+from models.engine import file_storage
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State

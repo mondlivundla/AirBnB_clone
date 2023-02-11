@@ -1,5 +1,4 @@
-# W3C validator for Holberton School
-
+# W3C validator for ALX
 For HTML and CSS files.
 
 Based on 2 APIs:

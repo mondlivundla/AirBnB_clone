@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-<<<<<<< HEAD
 """
 Unittest for console command interpreter
 """
@@ -906,7 +905,6 @@ EOF  all  count  create  destroy  help  quit  show  update
                       "text": str}
         }
         return attributes
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
 
 
 if __name__ == "__main__":

@@ -1,14 +1,4 @@
 footer {
-<<<<<<< HEAD
-	background-color: #fff;
-	height: 60px;
-	border-top: 1px solid #CCCCCC;
-	position: fixed;
-	inset: 0px;
-	top: unset;
-	display: grid;
-	place-content: center;
-=======
     background-color: white;
     height: 60px;
     width: 100%;
@@ -17,5 +7,4 @@ footer {
     bottom: 0;
     text-align: center;
     line-height: 60px;
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
 }

@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-<<<<<<< HEAD
 """
 Module: base.py
 """
@@ -31,12 +30,10 @@ class BaseModel():
         __save(self)
         __repr__(self)
         to_dict(self)
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
     """
 
     def __init__(self, *args, **kwargs):
         """
-<<<<<<< HEAD
         instatiates an object with it's
         attributes
         """
@@ -106,14 +103,12 @@ class BaseModel():
     def save(self):
         """
         Update instance with updated time & save to serialized file
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
         """
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
         """
-<<<<<<< HEAD
         returns a dictionary containing all keys/values
         of __dict__ of the instance
         """
@@ -134,4 +129,3 @@ class BaseModel():
             else:
                 dic[k] = v
         return dic
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3

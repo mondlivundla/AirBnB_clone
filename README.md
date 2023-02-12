@@ -1,5 +1,5 @@
 AirBnB clone
-This is a simple implementation of the AirBnB object management system in Python, following the steps outlined in the prompt.
+Thisis a simple implementation of the AirBnB object management system in Python, following the steps outlined in the prompt.
 
 Command Interpreter
 The command interpreter is a command-line interface for managing AirBnB objects. The following classes are defined in the implementation: BaseModel, User, Place, City, and State.

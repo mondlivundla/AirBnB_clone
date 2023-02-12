@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-<<<<<<< HEAD
 """The `review` module.
 
 It defines one class, `Review(),
@@ -7,13 +6,11 @@ which sub-classes the `BaseModel()` class.`
 =======
 """
 Module Review class
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
 """
 from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-<<<<<<< HEAD
     """A review of a place/house.
 
     It represents a review posted by the users
@@ -38,4 +35,3 @@ class Review(BaseModel):
     place_id = ""
     user_id = ""
     text = ""
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3

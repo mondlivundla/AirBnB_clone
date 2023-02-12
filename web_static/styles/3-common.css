@@ -1,21 +1,13 @@
-<<<<<<< HEAD
-*, *::after, *::before {
-	margin: 0px;
-	padding: 0px;
-	box-sizing: border-box;
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    font-size: 14px;
+    font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-body {
-	color: #484848;
-	font-size: 14px;
-	font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+main {
+    flex: 1;
 }
-=======
-body {
-    margin: 0;
-    padding: 0;
-    color: #484848;
-    font-size: 14px;
-    font-family: Circular, "Helvetica Neue", Arial, sans-serif;
-}
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3

@@ -1,57 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>AirBnB Clone</title>
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>AirBnB</title>
-	<style>
-		*,
-		*::after,
-		*::before {
-			margin: 0px;
-			padding: 0px;
-		}
+            header {
+                background-color: #FF0000;
+                height: 70px;
+                width: 100%;
+            }
 
-		header {
-			height: 70px;
-			background-color: red;
-		}
+            section {
+                flex: 1;
+            }
 
-		footer {
-			position: fixed;
-			display: grid;
-			place-content: center;
-			background-color: green;
-			height: 60px;
-			inset: 0px;
-			top: unset;
-		}
-
-	</style>
-</head>
-
-<body>
-	<header></header>
-	<footer>Best School</footer>
-</body>
-
-=======
-  <head>
-    <meta charset="UTF-8">
-    <title>Airbnb</title>
-    <style>
-      header {background-color:#FF0000; height:70px; width:100%;}
-      body {margin:0; padding:0;}
-      footer {background-color:#00FF00; height:60px; width:100%; position:absolute; bottom:0; text-align:center; line-height:60px;}
-    </style>
-  </head>
-  <body>
-    <header>
-    </header>
-    <footer>
-      Holberton School
-    </footer>
-  </body>
+            footer {
+                background-color: #00ff00;
+                height: 60px;
+                width: 100%;
+                margin-bottom: 0;
+                float: bottom;
+                display: flex;
+                align-items: center;
+                justify-content: space-around
+            }
+        </style>
+    </head>
+    <body>
+        <header></header>
+        <section>
+        </section>
+        <footer>
+            <small>Best School</small>
+        </footer>
+    </body>
 </html>

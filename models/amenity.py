@@ -1,26 +1,19 @@
 #!/usr/bin/python3
-"""The `amenity` module
 
-It defines one class, `Amenity(),
-which sub-classes the `BaseModel()` class.`
-=======
 """
-Module Amenity class
+This module provides the class Amenity
 """
-from models.base_model import BaseModel
 
 
-class Amenity(BaseModel):
-    """An amenity provided by a place/house.
+from models import base_model
 
-    Attributes:
-        name
+
+class Amenity(base_model.BaseModel):
+    """
+    Amenity class that inherits form BaseModel
     """
 
-=======
-    """
-    Inherits from BaseModel
-    Public class attribute:
-        name: (str)
-    """
     name = ""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

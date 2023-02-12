@@ -1,57 +1,29 @@
 #!/usr/bin/python3
 
+"""
+Suite to test amenity in modules.amenity
+"""
 import unittest
-import os
-import pep8
-from models.amenity import Amenity
+
 from models.base_model import BaseModel
+from models.amenity import Amenity
 
 
-class TestAmenity(unittest.TestCase):
+class TestAmenity(unittest.Test6Case):
+    """
+    TestCase for amenity
+    """
+    def initEnv(self):
+        self.amenity = Amenity()
 
-    @classmethod
-    def setUpClass(cls):
-        cls.amenity1 = Amenity()
-        cls.amenity1.name = "Hot Tub"
-
-    @classmethod
-    def tearDownClass(cls):
-        del cls.amenity1
-        try:
-            os.remove("file.json")
-        except FileNotFoundError:
-            pass
-
-    def test_style_check(self):
+    def test_class_attribute(self):
         """
-        Tests pep8 style
+        Test if amenity has attribute name
         """
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/amenity.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        self.assertTrue(hasattr(self.amenity, "name"))
 
-    def test_is_subclass(self):
-        self.assertTrue(issubclass(self.amenity1.__class__, BaseModel), True)
-
-    def test_checking_for_functions(self):
-        self.assertIsNotNone(Amenity.__doc__)
-
-    def test_has_attributes(self):
-        self.assertTrue('id' in self.amenity1.__dict__)
-        self.assertTrue('created_at' in self.amenity1.__dict__)
-        self.assertTrue('updated_at' in self.amenity1.__dict__)
-        self.assertTrue('name' in self.amenity1.__dict__)
-
-    def test_attributes_are_strings(self):
-        self.assertEqual(type(self.amenity1.name), str)
-
-    def test_save(self):
-        self.amenity1.save()
-        self.assertNotEqual(self.amenity1.created_at, self.amenity1.updated_at)
-
-    def test_to_dict(self):
-        self.assertEqual('to_dict' in dir(self.amenity1), True)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_if_amenity_is_a_basemodel_item(self):
+        """
+        Testy if Amenity is asubclass of baseModel
+        """
+        self.assertTrue(issubclass(type(self.amenity), BaseModel))

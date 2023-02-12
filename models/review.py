@@ -1,37 +1,20 @@
 #!/usr/bin/python3
-"""The `review` module.
 
-It defines one class, `Review(),
-which sub-classes the `BaseModel()` class.`
-=======
 """
-Module Review class
+This module provides the class Review
 """
-from models.base_model import BaseModel
+
+from models import base_model
 
 
-class Review(BaseModel):
-    """A review of a place/house.
-
-    It represents a review posted by the users
-    of the application about a place/house.
-
-    Attributes:
-        text
-        user_id
-        place_id
+class Review(base_model.BaseModel):
     """
-    text = ""
-    user_id = ""
-    place_id = ""
-=======
+    Review class that inherits from BaseModel
     """
-    Inherits from BaseModel
-    Public class attributes:
-        place_id:            (str) will be Place.id
-        user_id:             (str) will be User.id
-        text:                (str)
-    """
+
     place_id = ""
     user_id = ""
     text = ""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

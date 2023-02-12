@@ -1,85 +1,118 @@
 #!/usr/bin/python3
+
 """
-Unittest to test FileStorage class
+Test suite for FileStorage module
 """
-import unittest
-import pep8
-import json
 import os
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
+import unittest
+
+import models
+from models import base_model
 from models.engine.file_storage import FileStorage
+import json
+from datetime import datetime
 
 
 class TestFileStorage(unittest.TestCase):
-    '''testing file storage'''
+    """
+    Contains test for storage methods in FileStorage
+    """
+    def test_multiple_methods(self):
+        """
+        Test types representation
+        """
+        FS_dict = FileStorage.__dict__
+        FS__path = '_FileStorage__file_path'
+        FS__objs = '_FileStorage__objects'
+        FS_path = FS_dict[FS__path]
+        FS_objs = FS_dict[FS__objs]
 
-    @classmethod
-    def setUpClass(cls):
-        cls.rev1 = Review()
-        cls.rev1.place_id = "Raleigh"
-        cls.rev1.user_id = "Greg"
-        cls.rev1.text = "Grade A"
+        #assert types
+        self.assertTrue(type(FS_path) is str and FS_path)
+        self.assertTrue(type(FS_objs) is dict)
 
-    @classmethod
-    def teardown(cls):
-        del cls.rev1
+        #assert object
+        self.assertTrue(getattr(storage, FS__path))
+        self.assertTrue(getattr(storage, FS__objs) is storage.all())
 
-    def teardown(self):
-        try:
-            os.remove("file.json")
-        except:
-            pass
+        FS_objs.clear()
 
-    def test_style_check(self):
-        """
-        Tests pep8 style
-        """
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/engine/file_storage.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+                # object registration and persistent __objects dict
+        oobjs = storage.all()
+        oobjs_cp = oobjs.copy()
+        obj = BaseModel()
+        storage.new(obj)
+        self.assertTrue(oobjs is storage.all())
+        self.assertEqual(len(oobjs.keys()), 1)
+        self.assertTrue(set(storage.all().keys())
+                        .difference(set(oobjs_cp.keys())) ==
+                        {'BaseModel.{}'.format(obj.id)})
 
-    def test_all(self):
-        """
-        Tests method: all (returns dictionary <class>.<id> : <obj instance>)
-        """
-        storage = FileStorage()
-        instances_dic = storage.all()
-        self.assertIsNotNone(instances_dic)
-        self.assertEqual(type(instances_dic), dict)
-        self.assertIs(instances_dic, storage._FileStorage__objects)
+        oobjs_cp = oobjs.copy()
+        # storage.new(obj)
+        self.assertTrue(oobjs is storage.all())
+        self.assertEqual(oobjs, oobjs_cp)
 
-    def test_new(self):
-        """
-        Tests method: new (saves new object into dictionary)
-        """
-        m_storage = FileStorage()
-        instances_dic = m_storage.all()
-        melissa = User()
-        melissa.id = 999999
-        melissa.name = "Melissa"
-        m_storage.new(melissa)
-        key = melissa.__class__.__name__ + "." + str(melissa.id)
-        #print(instances_dic[key])
-        self.assertIsNotNone(instances_dic[key])
+        obj = BaseModel()
+        storage.new(obj)
+        self.assertEqual(len(oobjs.keys()), 2)
 
-    def test_reload(self):
-        """
-        Tests method: reload (reloads objects from string file)
-        """
-        a_storage = FileStorage()
-        try:
-            os.remove("file.json")
-        except:
-            pass
-        with open("file.json", "w") as f:
-            f.write("{}")
-        with open("file.json", "r") as r:
-            for line in r:
-                self.assertEqual(line, "{}")
-        self.assertIs(a_storage.reload(), None)
+        # check serialization
+        oobjs_cp = oobjs.copy()
+        storage.save()
+        self.assertTrue(os.path.isfile(FS_path))
+        with open(FS_path, 'r') as file:
+            js_objs = json.load(file)
+            self.assertTrue(type(js_objs) is dict)
+            self.assertEqual(len(js_objs.keys()), 2)
+            self.assertTrue(all(v in oobjs.keys() for v in js_objs.keys()))
+        storage.all().clear()
+        storage.reload()
+
+        # check deserialization
+        for k, v in oobjs_cp.items():
+            oobjs_cp[k] = v.to_dict()
+        oobjs_cp2 = storage.all().copy()
+        for k, v in oobjs_cp2.items():
+            oobjs_cp2[k] = v.to_dict()
+        self.assertEqual(oobjs_cp, oobjs_cp2)
+
+        # ### check no deserialization for absent file
+        oobjs_cp = storage.all().copy()
+        os.remove(FS_path)
+        storage.reload()
+        self.assertEqual(oobjs_cp, storage.all())
+
+        # automatic registration for instances created with no args
+        obj = BaseModel()
+        kid = 'BaseModel.{}'.format(obj.id)
+        self.assertTrue(kid in storage.all() and storage.all()[kid] is obj)
+        sleep(.01)
+        now = datetime.utcnow()
+        obj.updated_at = now
+        obj.save()
+        storage.all().clear()
+        storage.reload()
+        oobjs = storage.all()
+        storage.reload()  # insignificant reload
+        oobjs2 = storage.all()
+
+        # same deserialization
+        self.assertEqual(obj.to_dict(), storage.all()[kid].to_dict())
+        self.assertFalse(obj is storage.all()[kid].to_dict())
+
+        # args should not be counted towards manual instantiation
+        obj = BaseModel(1, 2, 3)
+        kid = 'BaseModel.{}'.format(obj.id)
+        self.assertTrue(kid in storage.all() and storage.all()[kid] is obj)
+
+        # instances constructed with kwargs are not registered
+        obj = BaseModel(id=str(uuid4()), created_at=now.isoformat(),
+                        updated_at=now.isoformat())
+        kid = 'BaseModel.{}'.format(obj.id)
+        self.assertFalse(kid in storage.all())
+        self.assertFalse(obj in storage.all().values())
+
+
+if __name__ == "__main__":
+    unittest.main()

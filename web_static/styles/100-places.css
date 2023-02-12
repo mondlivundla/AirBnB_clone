@@ -11,7 +11,7 @@
 }
 
 .places article {
-    min-width: 390px;
+    min-width: 350px;
     max-width: 390px;
     padding: 20px;
     margin: 20px;
@@ -99,4 +99,87 @@
 .description {
     margin-top: 30px;
     font-size: 16px;
+}
+
+.amenitiess {
+    margin-top: 40px;
+}
+
+.amenity {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #DDDDDD;
+    font-size: 16px;
+    padding-bottom: 15px;
+}
+
+.amenitiess ul,
+.reviews ul {
+    list-style: none;
+    font-size: 16px; 
+    padding-left: 0;
+}
+
+.tv,
+.wifi,
+.pet {
+    display: flex;
+}
+
+.tv_img {
+    width: 50px;
+    height: 50px;
+    background-image: url(../images/icon_tv.png);
+}
+.wifi_img {
+    width: 50px;
+    height: 50px;
+    background-image: url(../images/icon_wifi.png);
+}
+
+.pet_img {
+    width: 50px;
+    height: 50px;
+    background-image: url(../images/icon_pets.png);
+}
+
+.tv p,
+.wifi p,
+.pet p {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.reviews {
+    margin-top: 40px;
+}
+
+.reviews h3 {
+    margin: 0;
+    font-size: 14px;
+}
+.reviews ul p {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+    h3 {
+        font-weight: 600;
+        margin-bottom: 0;
+        margin-top: 10px;
+        margin-left: 5px;
+        
+    }
+    
+    h4 {
+        font-weight: 400;
+        font-size: 12px;
+        margin-top: 0;
+        margin-left: 5px;
+    }
 }

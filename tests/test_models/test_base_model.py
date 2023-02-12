@@ -83,7 +83,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(str(e.exception), msg)
 
     def test_save_excess_args(self):
-        #Tests save() with too many arguments
+        """Tests save() with too many arguments."""
         self.resetStorage()
         with self.assertRaises(TypeError) as e:
             BaseModel.save(self, 98)

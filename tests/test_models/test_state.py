@@ -33,7 +33,7 @@ class TestState(unittest.TestCase):
             os.remove(FileStorage._FileStorage__file_path)
 
     def test_8_instantiation(self):
-        """Tests instantiation of State class."""
+        """Tests initialization of of State class."""
 
         b = State()
         self.assertEqual(str(type(b)), "<class 'models.state.State'>")
@@ -47,6 +47,7 @@ class TestState(unittest.TestCase):
         for k, v in attributes.items():
             self.assertTrue(hasattr(o, k))
             self.assertEqual(type(getattr(o, k, None)), v)
+
 
 if __name__ == "__main__":
     unittest.main()

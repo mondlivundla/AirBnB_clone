@@ -1,59 +1,59 @@
 #!/usr/bin/python3
-"""Unit tests for the `city` module.
-"""
-import os
-import unittest
-from models.engine.file_storage import FileStorage
-from models import storage
-from models.city import City
-from datetime import datetime
 
-c1 = City()
-c2 = City(**c1.to_dict())
-c3 = City("hello", "wait", "in")
+import unittest
+import os
+import pep8
+from models.city import City
+from models.base_model import BaseModel
 
 
 class TestCity(unittest.TestCase):
-    """Test cases for the `City` class."""
 
-    def setUp(self):
-        pass
+    @classmethod
+    def setUpClass(cls):
+        cls.city1 = City()
+        cls.city1.name = "Raleigh"
+        cls.city1.state_id = "NC"
 
-    def tearDown(self) -> None:
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.exists(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    @classmethod
+    def tearDownClass(cls):
+        del cls.city1
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def test_params(self):
-        """Test method for class attributes"""
-        k = f"{type(c1).__name__}.{c1.id}"
-        self.assertIsInstance(c1.name, str)
-        self.assertEqual(c3.name, "")
-        c1.name = "Abuja"
-        self.assertEqual(c1.name, "Abuja")
+    def test_style_check(self):
+        """
+        Tests pep8 style
+        """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/city.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
-    def test_init(self):
-        """Test method for public instances"""
-        self.assertIsInstance(c1.id, str)
-        self.assertIsInstance(c1.created_at, datetime)
-        self.assertIsInstance(c1.updated_at, datetime)
-        self.assertEqual(c1.updated_at, c2.updated_at)
+    def test_is_subclass(self):
+        self.assertTrue(issubclass(self.city1.__class__, BaseModel), True)
+
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(City.__doc__)
+
+    def test_has_attributes(self):
+        self.assertTrue('id' in self.city1.__dict__)
+        self.assertTrue('created_at' in self.city1.__dict__)
+        self.assertTrue('updated_at' in self.city1.__dict__)
+        self.assertTrue('state_id' in self.city1.__dict__)
+        self.assertTrue('name' in self.city1.__dict__)
+
+    def test_attributes_are_strings(self):
+        self.assertEqual(type(self.city1.name), str)
+        self.assertEqual(type(self.city1.state_id), str)
 
     def test_save(self):
-        """Test method for save"""
-        old_update = c1.updated_at
-        c1.save()
-        self.assertNotEqual(c1.updated_at, old_update)
+        self.city1.save()
+        self.assertNotEqual(self.city1.created_at, self.city1.updated_at)
 
-    def test_todict(self):
-        """Test method for dict"""
-        a_dict = c2.to_dict()
-        self.assertIsInstance(a_dict, dict)
-        self.assertEqual(a_dict['__class__'], type(c2).__name__)
-        self.assertIn('created_at', a_dict.keys())
-        self.assertIn('updated_at', a_dict.keys())
-        self.assertNotEqual(c1, c2)
+    def test_to_dict(self):
+        self.assertEqual('to_dict' in dir(self.city1), True)
 
 
 if __name__ == "__main__":

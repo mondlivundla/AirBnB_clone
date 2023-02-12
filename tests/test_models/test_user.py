@@ -1,65 +1,67 @@
 #!/usr/bin/python3
-
-import unittest
+"""Unit tests for the `state` module.
+"""
 import os
-import pep8
+import unittest
+from models.engine.file_storage import FileStorage
 from models.user import User
-from models.base_model import BaseModel
+from models import storage
+from datetime import datetime
 
 
-class TestUser(unittest.TestCase):
+class TestState(unittest.TestCase):
+    """Test cases for the `User` class."""
 
-    @classmethod
-    def setUpClass(cls):
-        cls.my_user = User()
-        cls.my_user.first_name = "Betty"
-        cls.my_user.last_name = "Holberton"
-        cls.my_user.email = "airbnb@holbertonshool.com"
-        cls.my_user.password = "root"
+    def setUp(self):
+        pass
 
-    @classmethod
-    def tearDownClass(cls):
-        del cls.my_user
-        try:
-            os.remove("file.json")
-        except FileNotFoundError:
-            pass
+    def tearDown(self) -> None:
+        """Resets FileStorage data."""
+        FileStorage._FileStorage__objects = {}
+        if os.path.exists(FileStorage._FileStorage__file_path):
+            os.remove(FileStorage._FileStorage__file_path)
 
-    def test_style_check(self):
-        """
-        Tests pep8 style
-        """
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/user.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+    def test_params(self):
+        u1 = User()
+        k = f"{type(u1).__name__}.{u1.id}"
+        self.assertIn(k, storage.all())
+        self.assertIsInstance(u1.email, str)
+        self.assertIsInstance(u1.password, str)
+        self.assertIsInstance(u1.first_name, str)
+        self.assertIsInstance(u1.last_name, str)
 
-    def test_is_subclass(self):
-        self.assertTrue(issubclass(self.my_user.__class__, BaseModel), True)
+    def test_init(self):
+        """Test method for public instances"""
+        u1 = User()
+        u2 = User(**u1.to_dict())
+        self.assertIsInstance(u1.id, str)
+        self.assertIsInstance(u1.created_at, datetime)
+        self.assertIsInstance(u1.updated_at, datetime)
+        self.assertEqual(u1.updated_at, u2.updated_at)
 
-    def test_checking_for_functions(self):
-        self.assertIsNotNone(User.__doc__)
-
-    def test_has_attributes(self):
-        self.assertTrue('email' in self.my_user.__dict__)
-        self.assertTrue('id' in self.my_user.__dict__)
-        self.assertTrue('created_at' in self.my_user.__dict__)
-        self.assertTrue('updated_at' in self.my_user.__dict__)
-        self.assertTrue('password' in self.my_user.__dict__)
-        self.assertTrue('first_name' in self.my_user.__dict__)
-        self.assertTrue('last_name' in self.my_user.__dict__)
-
-    def test_attributes_are_strings(self):
-        self.assertEqual(type(self.my_user.email), str)
-        self.assertEqual(type(self.my_user.password), str)
-        self.assertEqual(type(self.my_user.first_name), str)
-        self.assertEqual(type(self.my_user.first_name), str)
+    def test_str(self):
+        """Test method for str representation"""
+        u1 = User()
+        string = f"[{type(u1).__name__}] ({u1.id}) {u1.__dict__}"
+        self.assertEqual(u1.__str__(), string)
 
     def test_save(self):
-        self.my_user.save()
-        self.assertNotEqual(self.my_user.created_at, self.my_user.updated_at)
+        """Test method for save"""
+        u1 = User()
+        old_update = u1.updated_at
+        u1.save()
+        self.assertNotEqual(u1.updated_at, old_update)
 
-    def test_to_dict(self):
-        self.assertEqual('to_dict' in dir(self.my_user), True)
+    def test_todict(self):
+        """Test method for dict"""
+        u1 = User()
+        u2 = User(**u1.to_dict())
+        a_dict = u2.to_dict()
+        self.assertIsInstance(a_dict, dict)
+        self.assertEqual(a_dict['__class__'], type(u2).__name__)
+        self.assertIn('created_at', a_dict.keys())
+        self.assertIn('updated_at', a_dict.keys())
+        self.assertNotEqual(u1, u2)
 
 
 if __name__ == "__main__":

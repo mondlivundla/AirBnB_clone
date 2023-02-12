@@ -1,56 +1,69 @@
 #!/usr/bin/python3
-
-import unittest
+"""Unit tests for the `state` module.
+"""
 import os
-import pep8
+import unittest
+from models.engine.file_storage import FileStorage
 from models.state import State
-from models.base_model import BaseModel
+from models import storage
+from datetime import datetime
 
 
 class TestState(unittest.TestCase):
+    """Test cases for the `State` class."""
 
-    @classmethod
-    def setUpClass(cls):
-        cls.state1 = State()
-        cls.state1.name = "North_Carolina_AKA_THE_BEST_STATE"
+    def setUp(self):
+        pass
 
-    @classmethod
-    def tearDownClass(cls):
-        del cls.state1
-        try:
-            os.remove("file.json")
-        except FileNotFoundError:
-            pass
+    def tearDown(self) -> None:
+        """Resets FileStorage data."""
+        FileStorage._FileStorage__objects = {}
+        if os.path.exists(FileStorage._FileStorage__file_path):
+            os.remove(FileStorage._FileStorage__file_path)
 
-    def test_style_check(self):
-        """
-        Tests pep8 style
-        """
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/state.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+    def test_params(self):
+        s1 = State()
+        s3 = State("hello", "wait", "in")
 
-    def test_is_subclass(self):
-        self.assertTrue(issubclass(self.state1.__class__, BaseModel), True)
+        k = f"{type(s1).__name__}.{s1.id}"
+        self.assertIsInstance(s1.name, str)
+        self.assertEqual(s3.name, "")
+        s1.name = "Chicago"
+        self.assertEqual(s1.name, "Chicago")
+        self.assertIn(k, storage.all())
 
-    def test_checking_for_functions(self):
-        self.assertIsNotNone(State.__doc__)
+    def test_init(self):
+        """Test method for public instances"""
+        s1 = State()
+        s2 = State(**s1.to_dict())
+        self.assertIsInstance(s1.id, str)
+        self.assertIsInstance(s1.created_at, datetime)
+        self.assertIsInstance(s1.updated_at, datetime)
+        self.assertEqual(s1.updated_at, s2.updated_at)
 
-    def test_has_attributes(self):
-        self.assertTrue('id' in self.state1.__dict__)
-        self.assertTrue('created_at' in self.state1.__dict__)
-        self.assertTrue('updated_at' in self.state1.__dict__)
-        self.assertTrue('name' in self.state1.__dict__)
-
-    def test_attributes_are_strings(self):
-        self.assertEqual(type(self.state1.name), str)
+    def test_str(self):
+        """Test method for str representation"""
+        s1 = State()
+        string = f"[{type(s1).__name__}] ({s1.id}) {s1.__dict__}"
+        self.assertEqual(s1.__str__(), string)
 
     def test_save(self):
-        self.state1.save()
-        self.assertNotEqual(self.state1.created_at, self.state1.updated_at)
+        """Test method for save"""
+        s1 = State()
+        old_update = s1.updated_at
+        s1.save()
+        self.assertNotEqual(s1.updated_at, old_update)
 
-    def test_to_dict(self):
-        self.assertEqual('to_dict' in dir(self.state1), True)
+    def test_todict(self):
+        """Test method for dict"""
+        s1 = State()
+        s2 = State(**s1.to_dict())
+        a_dict = s2.to_dict()
+        self.assertIsInstance(a_dict, dict)
+        self.assertEqual(a_dict['__class__'], type(s2).__name__)
+        self.assertIn('created_at', a_dict.keys())
+        self.assertIn('updated_at', a_dict.keys())
+        self.assertNotEqual(s1, s2)
 
 
 if __name__ == "__main__":

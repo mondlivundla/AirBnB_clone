@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-<<<<<<< HEAD
 """The `place` module
 
 It defines one class, `Place(),
@@ -7,13 +6,11 @@ which sub-classes the `BaseModel()` class.`
 =======
 """
 Module Place class
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
 """
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-<<<<<<< HEAD
     """A place/house in the application.
 
     It represents a place/house uploaded
@@ -69,5 +66,4 @@ class Place(BaseModel):
     price_by_night = 0
     latitude = 0.0
     longitude = 0.0
->>>>>>> ebc98b8478f6e8be94390166139c7793502138a3
     amenity_ids = []

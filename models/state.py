@@ -1,19 +1,14 @@
 #!/usr/bin/python3
-
 """
-This module provides the class State
+Module State class
 """
+from models.base_model import BaseModel
 
 
-from models import base_model
-
-
-class State(base_model.BaseModel):
+class State(BaseModel):
     """
-    State class that inherits form BaseModel
+    Inherits from BaseModel
+    Public class attribute:
+        name: (str)
     """
-
     name = ""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)

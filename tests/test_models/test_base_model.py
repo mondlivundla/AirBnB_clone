@@ -1,73 +1,59 @@
 #!/usr/bin/python3
-
 """
-Module with test suite for class BaseModel
+Unittest for BaseModel class
 """
-
 import unittest
-from datetime import datetime
 import os
-import models
+import pep8
 from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
-    """
-    TestSuite for BaseModel
-    """
-    def test_if_id_exists(self):
-        """
-        Case to test if id exists upon initialization
-        """
-        i = BaseModel()
-        self.assertTrue(hasattr(i, "id"))
 
-    def test_unique_id_generated(self):
-        """
-        Test if a unique id is called each time
-        """
-        i_a = BaseModel()
-        i_b = BaseModel()
-        self.assertNotEqual(i_a.id, i_b.id)
+    @classmethod
+    def setUpClass(cls):
+        cls.base1 = BaseModel()
+        cls.base1.name = "Greg"
+        cls.base1.my_number = 29
 
-    def test_str_print_format(self):
-        """
-        Test for the rirhst object representation
-        """
-        i = BaseModel()
-        self.assertEqual(str(i),
-                         "[BaseModel] ({}) {}".format(i.id, i.__dict__))
+    @classmethod
+    def tearDownClass(cls):
+        del cls.base1
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def test_created_at_is_format(self):
+    def test_style_check(self):
         """
-        Test if the created_at attribute is datetime format
+        Tests pep8 style
         """
-        i = BaseModel()
-        self.assertTrue(type(i.created_at) is datetime)
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/base_model.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
-    def test_updated_at_is_format(self):
-        """
-        Test if the created_at attribute is datetime format
-        """
-        i = BaseModel()
-        self.assertTrue(type(i.updated_at) is datetime)
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(BaseModel.__doc__)
+        self.assertIsNotNone(BaseModel.save.__doc__)
+        self.assertIsNotNone(BaseModel.to_dict.__doc__)
 
-    def test_initial_equality_of_times(self):
-        """
-        Test if 'created_at' and 'updated_at' are equal
-        """
-        i = BaseModel()
-        self.assertEqual(i.created_at, i.updated_at)
+    def test_attributes(self):
+        self.assertTrue(hasattr(BaseModel, "__init__"))
+        self.assertTrue(hasattr(BaseModel, "save"))
+        self.assertTrue(hasattr(BaseModel, "to_dict"))
 
-    def test_if_save_method_updates_time_attr(self):
-        """
-        Test functionality of the save method
-        """
-        i = BaseModel()
-        sleep(0.05)
-        time_update = i.updated_at
-        i.save()
-        self.assertLess(i.time_update, i.updated_at)
+    def test_init(self):
+        self.assertTrue(isinstance(self.base1, BaseModel))
+
+    def test_save(self):
+        self.base1.save()
+        self.assertNotEqual(self.base1.created_at, self.base1.updated_at)
+
+    def test_to_dict(self):
+        base1_dict = self.base1.to_dict()
+        self.assertEqual(self.base1.__class__.__name__, 'BaseModel')
+        self.assertIsInstance(base1_dict['created_at'], str)
+        self.assertIsInstance(base1_dict['updated_at'], str)
 
 
 if __name__ == "__main__":

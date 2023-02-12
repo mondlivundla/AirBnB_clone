@@ -1,20 +1,16 @@
 #!/usr/bin/python3
-
 """
-This module provides the class City
+Module City class
 """
+from models.base_model import BaseModel
 
 
-from models import base_model
-
-
-class City(base_model.BaseModel):
+class City(BaseModel):
     """
-    City class that inherits from BaseModel
+    Inherits from BaseModel
+    Public class attributes:
+        state_id: (str) will be State.id
+        name:     (str)
     """
-
     state_id = ""
     name = ""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)

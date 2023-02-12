@@ -1,26 +1,19 @@
 .places {
-    font-size: 30px;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
+  text-align: center;
 }
-
 .places h1 {
-    width: 1000px;
-    margin-bottom: 0;
+  font-size: 30px;
+  text-align: left;
 }
-
-.places article {
-    min-width: 390px;
-    max-width: 390px;
-    padding: 20px;
-    margin: 20px;
-    border-style: solid;
-    border-radius: 4px;
-    border-width: 1px;
-    border-color: #FF5A5F ;
+article {
+  width: 390px;
+  border: 1px solid #FF5A5F;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 20px;
+  display: inline-block;
 }
-
-.places article h2 {
-    font-size: 30px;
+article h2 {
+  font-size: 30px;
+  text-align: center;
 }

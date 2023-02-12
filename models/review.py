@@ -1,20 +1,18 @@
 #!/usr/bin/python3
-
 """
-This module provides the class Review
+Module Review class
 """
+from models.base_model import BaseModel
 
-from models import base_model
 
-
-class Review(base_model.BaseModel):
+class Review(BaseModel):
     """
-    Review class that inherits from BaseModel
+    Inherits from BaseModel
+    Public class attributes:
+        place_id:            (str) will be Place.id
+        user_id:             (str) will be User.id
+        text:                (str)
     """
-
     place_id = ""
     user_id = ""
     text = ""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
